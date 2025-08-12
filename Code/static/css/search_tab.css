@@ -1,0 +1,30 @@
+/* #은 id 선택자, .(점)은 클래스 선택자, ~ 바로 옆 태그 선택 */
+.search_tab {
+    position: fixed;    /* 스크롤을 따라오도록 지정 */
+    right: -265px;
+    width: 300px;
+    min-height: 80vh;   
+    margin-top: calc((100vh - 80vh) / 2);
+    transition: all .5s;
+
+    font-family: "Noto Sans KR", sans-serif;
+    z-index: 10;
+    overflow: hidden; /* 넘치면 안보이게 */
+    
+    color: white;
+    background: #2c2c2c;
+    border-radius: 20px;
+}
+/* 마우스 오버레이 동작 설정 */
+.search_content {
+    display: none;
+}
+
+.search_tab:hover {
+    transform: translate(-230px, 0);   /* 둥근 모서리의 너비만큼 숨겨주기 */
+    display: block;
+}
+
+.search_tab:hover .search_content{
+    display: block;
+}

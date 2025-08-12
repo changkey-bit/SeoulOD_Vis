@@ -1,0 +1,31 @@
+body, html {
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.map-container {
+  margin: auto;
+  display: flex;
+  justify-content: center;
+}
+
+.button {
+  display: block;
+  margin-top: 30px;
+  margin-left: 130px;
+  padding: 10px 20px;
+  background-color: #ce16a0;
+  border-radius: 10px;
+  cursor: pointer;
+  border: 2px solid #3b3b3b;
+  color: white;
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: bold;
+}
+
+.label_set {
+font-weight: bold;
+margin-left: 10px;
+}

@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+        <title>HCI-Data Viz</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Style (.css) setting -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/frame.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/tab.css')}}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/checkbox.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/loading.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/first.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/search_tab.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/reset_button.css') }}">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+        <!-- Font setting -->
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+        <div class="map_tab">
+                <input type="radio" name="tabmenu" id="heat_tab">
+                <label for="heat_tab">Heat Map</label>
+                <input type="radio" name="tabmenu" id="flow_tab">
+                <label for="flow_tab">Flow Map</label>
+
+                <div class="conbox con1">
+                        <form id="myForm" action="/main/heat" method="POST" onsubmit="return validateForm_heat()">
+                                <br>
+                                <div class="condition-label">
+                                        <label class="label_set">선택 연도</label><input type="checkbox" class="checkall"
+                                                id="selectAllYear1"><br>
+                                        <div class="checkboxes1">
+                                                <label><input type="checkbox" name="year" value="2019년" class="cb1"
+                                                                id="cbtest1" {% if '2019년' in selected_year1 %}checked{%
+                                                                endif %}> 2019</label>
+                                                <label><input type="checkbox" name="year" value="2020년" class="cb1"
+                                                                id="cbtest1" {% if '2020년' in selected_year1 %}checked{%
+                                                                endif %}> 2020</label>
+                                                <label><input type="checkbox" name="year" value="2021년" class="cb1"
+                                                                id="cbtest1" {% if '2021년' in selected_year1 %}checked{%
+                                                                endif %}> 2021</label>
+                                                <label><input type="checkbox" name="year" value="2022년" class="cb1"
+                                                                id="cbtest1" {% if '2022년' in selected_year1 %}checked{%
+                                                                endif %}> 2022</label>
+                                        </div>
+                                </div>
+
+                                <div class="dropdown-area3">
+                                        <label class="label_set">선택 월</label><br>
+                                        <select name="month" style="width:100px; margin-top: 10px;" id="month_data">
+                                                <option value=" 1월" {% if selected_month1==' 1월' %}selected{% endif %}>
+                                                        1월</option>
+                                                <option value=" 2월" {% if selected_month1==' 2월' %}selected{% endif %}>
+                                                        2월</option>
+                                                <option value=" 3월" {% if selected_month1==' 3월' %}selected{% endif %}>
+                                                        3월</option>
+                                                <option value=" 4월" {% if selected_month1==' 4월' %}selected{% endif %}>
+                                                        4월</option>
+                                                <option value=" 5월" {% if selected_month1==' 5월' %}selected{% endif %}>
+                                                        5월</option>
+                                                <option value=" 6월" {% if selected_month1==' 6월' %}selected{% endif %}>
+                                                        6월</option>
+                                                <option value=" 7월" {% if selected_month1==' 7월' %}selected{% endif %}>
+                                                        7월</option>
+                                                <option value=" 8월" {% if selected_month1==' 8월' %}selected{% endif %}>
+                                                        8월</option>
+                                                <option value=" 9월" {% if selected_month1==' 9월' %}selected{% endif %}>
+                                                        9월</option>
+                                                <option value=" 10월" {% if selected_month1==' 10월' %}selected{% endif
+                                                        %}>
+                                                        10월</option>
+                                                <option value=" 11월" {% if selected_month1==' 11월' %}selected{% endif
+                                                        %}>
+                                                        11월</option>
+                                                <option value=" 12월" {% if selected_month1==' 12월' %}selected{% endif
+                                                        %}>
+                                                        12월</option>
+                                        </select>
+                                </div>
+
+                                <div class="condition-label">
+                                        <label class="label_set">선택 시간대</label><input type="checkbox" class="checkall"
+                                                id="selectAllHour1"><br>
+                                        <div class="checkboxes2">
+                                                <label><input type="checkbox" name="hour" value=" 0시" class="cb3"
+                                                                id="cbtest3" {% if ' 0시' in selected_hour1 %}checked{%
+                                                                endif %}> 0시~1시</label>
+                                                <label><input type="checkbox" name="hour" value=" 1시" class="cb3"
+                                                                id="cbtest3" {% if ' 1시' in selected_hour1 %}checked{%
+                                                                endif %}> 1시~2시</label>
+                                                <label><input type="checkbox" name="hour" value=" 2시" class="cb3"
+                                                                id="cbtest3" {% if ' 2시' in selected_hour1 %}checked{%
+                                                                endif %}> 2시~3시</label>
+                                                <label><input type="checkbox" name="hour" value=" 3시" class="cb3"
+                                                                id="cbtest3" {% if ' 3시' in selected_hour1 %}checked{%
+                                                                endif %}> 3시~4시</label>
+                                                <label><input type="checkbox" name="hour" value=" 4시" class="cb3"
+                                                                id="cbtest3" {% if ' 4시' in selected_hour1 %}checked{%
+                                                                endif %}> 4시~5시</label>
+                                                <label><input type="checkbox" name="hour" value=" 5시" class="cb3"
+                                                                id="cbtest3" {% if ' 5시' in selected_hour1 %}checked{%
+                                                                endif %}> 5시~6시</label>
+                                                <label><input type="checkbox" name="hour" value=" 6시" class="cb3"
+                                                                id="cbtest3" {% if ' 6시' in selected_hour1 %}checked{%
+                                                                endif %}> 6시~7시</label>
+                                                <label><input type="checkbox" name="hour" value=" 7시" class="cb3"
+                                                                id="cbtest3" {% if ' 7시' in selected_hour1 %}checked{%
+                                                                endif %}> 7시~8시</label>
+                                                <label><input type="checkbox" name="hour" value=" 8시" class="cb3"
+                                                                id="cbtest3" {% if ' 8시' in selected_hour1 %}checked{%
+                                                                endif %}> 8시~9시</label>
+                                                <label><input type="checkbox" name="hour" value=" 9시" class="cb3"
+                                                                id="cbtest3" {% if ' 9시' in selected_hour1 %}checked{%
+                                                                endif %}> 9시~10시</label>
+                                                <label><input type="checkbox" name="hour" value=" 10시" class="cb3"
+                                                                id="cbtest3" {% if ' 10시' in selected_hour1 %}checked{%
+                                                                endif %}> 10시~11시</label>
+                                                <label><input type="checkbox" name="hour" value=" 11시" class="cb3"
+                                                                id="cbtest3" {% if ' 11시' in selected_hour1 %}checked{%
+                                                                endif %}> 11시~12시</label>
+                                                <label><input type="checkbox" name="hour" value=" 12시" class="cb3"
+                                                                id="cbtest3" {% if ' 12시' in selected_hour1 %}checked{%
+                                                                endif %}> 12시~13시</label>
+                                                <label><input type="checkbox" name="hour" value=" 13시" class="cb3"
+                                                                id="cbtest3" {% if ' 13시' in selected_hour1 %}checked{%
+                                                                endif %}> 13시~14시</label>
+                                                <label><input type="checkbox" name="hour" value=" 14시" class="cb3"
+                                                                id="cbtest3" {% if ' 14시' in selected_hour1 %}checked{%
+                                                                endif %}> 14시~15시</label>
+                                                <label><input type="checkbox" name="hour" value=" 15시" class="cb3"
+                                                                id="cbtest3" {% if ' 15시' in selected_hour1 %}checked{%
+                                                                endif %}> 15시~16시</label>
+                                                <label><input type="checkbox" name="hour" value=" 16시" class="cb3"
+                                                                id="cbtest3" {% if ' 16시' in selected_hour1 %}checked{%
+                                                                endif %}> 16시~17시</label>
+                                                <label><input type="checkbox" name="hour" value=" 17시" class="cb3"
+                                                                id="cbtest3" {% if ' 17시' in selected_hour1 %}checked{%
+                                                                endif %}> 17시~18시</label>
+                                                <label><input type="checkbox" name="hour" value=" 18시" class="cb3"
+                                                                id="cbtest3" {% if ' 18시' in selected_hour1 %}checked{%
+                                                                endif %}> 18시~19시</label>
+                                                <label><input type="checkbox" name="hour" value=" 19시" class="cb3"
+                                                                id="cbtest3" {% if ' 19시' in selected_hour1 %}checked{%
+                                                                endif %}> 19시~20시</label>
+                                                <label><input type="checkbox" name="hour" value=" 20시" class="cb3"
+                                                                id="cbtest3" {% if ' 20시' in selected_hour1 %}checked{%
+                                                                endif %}> 20시~21시</label>
+                                                <label><input type="checkbox" name="hour" value=" 21시" class="cb3"
+                                                                id="cbtest3" {% if ' 21시' in selected_hour1 %}checked{%
+                                                                endif %}> 21시~22시</label>
+                                                <label><input type="checkbox" name="hour" value=" 22시" class="cb3"
+                                                                id="cbtest3" {% if ' 22시' in selected_hour1 %}checked{%
+                                                                endif %}> 22시~23시</label>
+                                                <label><input type="checkbox" name="hour" value=" 23시" class="cb3"
+                                                                id="cbtest3" {% if ' 23시' in selected_hour1 %}checked{%
+                                                                endif %}> 23시~00시</label>
+                                        </div>
+                                </div>
+                                <div class="condition-label">
+                                        <label class="label_set">선택 나이대</label><input type="checkbox" class="checkall"
+                                                id="selectAllAge1"><br>
+                                        <div class="checkboxes2">
+                                                <label><input type="checkbox" name="age" value=" 0세" class="cb4"
+                                                                id="cbtest4" {% if ' 0세' in selected_age1 %}checked{%
+                                                                endif %}> 9세 이하</label>
+                                                <label><input type="checkbox" name="age" value=" 10세" class="cb4"
+                                                                id="cbtest4" {% if ' 10세' in selected_age1 %}checked{%
+                                                                endif %}> 10~19세</label>
+                                                <label><input type="checkbox" name="age" value=" 20세" class="cb4"
+                                                                id="cbtest4" {% if ' 20세' in selected_age1 %}checked{%
+                                                                endif %}> 20~29세</label>
+                                                <label><input type="checkbox" name="age" value=" 30세" class="cb4"
+                                                                id="cbtest4" {% if ' 30세' in selected_age1 %}checked{%
+                                                                endif %}> 30~39세</label>
+                                                <label><input type="checkbox" name="age" value=" 40세" class="cb4"
+                                                                id="cbtest4" {% if ' 40세' in selected_age1 %}checked{%
+                                                                endif %}> 40~49세</label>
+                                                <label><input type="checkbox" name="age" value=" 50세" class="cb4"
+                                                                id="cbtest4" {% if ' 50세' in selected_age1 %}checked{%
+                                                                endif %}> 50~59세</label>
+                                                <label><input type="checkbox" name="age" value=" 60세" class="cb4"
+                                                                id="cbtest4" {% if ' 60세' in selected_age1 %}checked{%
+                                                                endif %}> 60~69세</label>
+                                                <label><input type="checkbox" name="age" value=" 70세" class="cb4"
+                                                                id="cbtest4" {% if ' 70세' in selected_age1 %}checked{%
+                                                                endif %}> 70~79세</label>
+                                                <label><input type="checkbox" name="age" value=" 80세" class="cb4"
+                                                                id="cbtest4" {% if ' 80세' in selected_age1 %}checked{%
+                                                                endif %}> 80세 이상</label>
+                                        </div>
+                                </div>
+
+                                <div class="dropdown-grid">
+                                        <div class="dropdown-area1">
+                                                <div class="dropdown-title">
+                                                        <h3>이동 유형</h3>
+                                                </div>
+                                                <select name="od" , id="od_data">
+                                                        <option value="유입" {% if selected_od1=='유입' %}selected{% endif
+                                                                %}>유입</option>
+                                                        <option value="유출" {% if selected_od1=='유출' %}selected{% endif
+                                                                %}>유출</option>
+                                                        <option value="유입+유출" {% if selected_od1=='유입+유출' %}selected{%
+                                                                endif %}>유입+유출</option>
+                                                </select>
+                                        </div>
+
+                                        <div class="dropdown-area2">
+                                                <div class="dropdown-title">
+                                                        <h3>성별</h3>
+                                                </div>
+                                                <select name="sex" , id="sex_data">
+                                                        <option value="남성+여성" {% if selected_sex1=='남성+여성' %}selected{%
+                                                                endif %}>남성+여성</option>
+                                                        <option value="남성" {% if selected_sex1=='남성' %}selected{% endif
+                                                                %}>남성</option>
+                                                        <option value="여성" {% if selected_sex1=='여성' %}selected{% endif
+                                                                %}>여성</option>
+                                                </select>
+                                        </div>
+
+                                        <div class="dropdown-area4">
+                                                <div class="dropdown-title">
+                                                        <h3>지도 색상</h3>
+                                                </div>
+                                                <select name="map_color" style="width:80px" id="color_data">
+                                                        <option value="OrRd" {% if selected_color1=='OrRd' %}selected{%
+                                                                endif %}>빨강</option>
+                                                        <option value="BuPu" {% if selected_color1=='BuPu' %}selected{%
+                                                                endif %}>파랑</option>
+                                                        <option value="YlGn" {% if selected_color1=='YlGn' %}selected{%
+                                                                endif %}>초록</option>
+                                                </select>
+                                        </div>
+
+                                        <div class="dropdown-area1">
+                                                <div class="dropdown-title">
+                                                        <h3>분포기준</h3>
+                                                </div>
+                                                <select name="distribution" , id="dist_data1">
+                                                        <option value="personcount" {% if selected_dist1=='personcount'
+                                                                %}selected{% endif %}>인원수 (명)</option>
+                                                        <option value="dist" {% if selected_dist1=='dist'
+                                                                %}selected{% endif %}>이동거리 (m)
+                                                        </option>
+                                                        <option value="ttime" {% if selected_dist1=='ttime'
+                                                                %}selected{% endif %}>이동시간 (분)
+                                                        </option>
+                                                </select>
+                                        </div>
+                                        <div class="dropdown-area2">
+                                                <div class="dropdown-title">
+                                                        <h3>최대 기준치</h3>
+                                                </div>
+                                                <select name="criteria_value" , id="criteria_data1">
+                                                </select>
+                                        </div>
+                                </div>
+                                <div class="input_poly">
+                                        <label id="polylabel" for="numberInput1">관심 POLYGON : </label><input
+                                                type="number" id="numberInput1" name="numberInput1"
+                                                placeholder="--- 6자리 숫자 ---" value="{{ input_poly_heat }}">
+                                </div>
+                                <button class="button" type="submit" id="btnValue" name="submit_button"
+                                        value="heat">HeatMap으로
+                                        보기</button>
+                                <br><br>
+                        </form>
+                </div>
+
+                <div class="conbox con2">
+                        <form id="myForm" action="/main/flow" method="POST" onsubmit="return validateForm_flow()">
+                                <br>
+                                <div class="condition-label">
+                                        <label class="label_set">선택 연도</label><input type="checkbox" class="checkall"
+                                                id="selectAllYear2"><br>
+                                        <div class="checkboxes1">
+                                                <label><input type="checkbox" name="year" value="2019년" class="cb1"
+                                                                id="cbtest5" {% if '2019년' in selected_year2 %}checked{%
+                                                                endif %}> 2019</label>
+                                                <label><input type="checkbox" name="year" value="2020년" class="cb1"
+                                                                id="cbtest5" {% if '2020년' in selected_year2 %}checked{%
+                                                                endif %}> 2020</label>
+                                                <label><input type="checkbox" name="year" value="2021년" class="cb1"
+                                                                id="cbtest5" {% if '2021년' in selected_year2 %}checked{%
+                                                                endif %}> 2021</label>
+                                                <label><input type="checkbox" name="year" value="2022년" class="cb1"
+                                                                id="cbtest5" {% if '2022년' in selected_year2 %}checked{%
+                                                                endif %}> 2022</label>
+                                        </div>
+                                </div>
+
+                                <div class="dropdown-area3">
+                                        <label class="label_set">선택 월</label><br>
+                                        <select name="month" style="width:100px; margin-top: 10px;" id="month_data">
+                                                <option value=" 1월" {% if selected_month2==' 1월' %}selected{% endif %}>
+                                                        1월</option>
+                                                <option value=" 2월" {% if selected_month2==' 2월' %}selected{% endif %}>
+                                                        2월</option>
+                                                <option value=" 3월" {% if selected_month2==' 3월' %}selected{% endif %}>
+                                                        3월</option>
+                                                <option value=" 4월" {% if selected_month2==' 4월' %}selected{% endif %}>
+                                                        4월</option>
+                                                <option value=" 5월" {% if selected_month2==' 5월' %}selected{% endif %}>
+                                                        5월</option>
+                                                <option value=" 6월" {% if selected_month2==' 6월' %}selected{% endif %}>
+                                                        6월</option>
+                                                <option value=" 7월" {% if selected_month2==' 7월' %}selected{% endif %}>
+                                                        7월</option>
+                                                <option value=" 8월" {% if selected_month2==' 8월' %}selected{% endif %}>
+                                                        8월</option>
+                                                <option value=" 9월" {% if selected_month2==' 9월' %}selected{% endif %}>
+                                                        9월</option>
+                                                <option value=" 10월" {% if selected_month2==' 10월' %}selected{% endif
+                                                        %}>
+                                                        10월</option>
+                                                <option value=" 11월" {% if selected_month2==' 11월' %}selected{% endif
+                                                        %}>
+                                                        11월</option>
+                                                <option value=" 12월" {% if selected_month2==' 12월' %}selected{% endif
+                                                        %}>
+                                                        12월</option>
+                                        </select>
+                                </div>
+
+                                <div class="condition-label">
+                                        <label class="label_set">선택 시간대</label><input type="checkbox" class="checkall"
+                                                id="selectAllHour2"><br>
+                                        <div class="checkboxes2">
+                                                <label><input type="checkbox" name="hour" value=" 0시" class="cb3"
+                                                                id="cbtest7" {% if ' 0시' in selected_hour2 %}checked{%
+                                                                endif %}> 0시~1시</label>
+                                                <label><input type="checkbox" name="hour" value=" 1시" class="cb3"
+                                                                id="cbtest7" {% if ' 1시' in selected_hour2 %}checked{%
+                                                                endif %}> 1시~2시</label>
+                                                <label><input type="checkbox" name="hour" value=" 2시" class="cb3"
+                                                                id="cbtest7" {% if ' 2시' in selected_hour2 %}checked{%
+                                                                endif %}> 2시~3시</label>
+                                                <label><input type="checkbox" name="hour" value=" 3시" class="cb3"
+                                                                id="cbtest7" {% if ' 3시' in selected_hour2 %}checked{%
+                                                                endif %}> 3시~4시</label>
+                                                <label><input type="checkbox" name="hour" value=" 4시" class="cb3"
+                                                                id="cbtest7" {% if ' 4시' in selected_hour2 %}checked{%
+                                                                endif %}> 4시~5시</label>
+                                                <label><input type="checkbox" name="hour" value=" 5시" class="cb3"
+                                                                id="cbtest7" {% if ' 5시' in selected_hour2 %}checked{%
+                                                                endif %}> 5시~6시</label>
+                                                <label><input type="checkbox" name="hour" value=" 6시" class="cb3"
+                                                                id="cbtest7" {% if ' 6시' in selected_hour2 %}checked{%
+                                                                endif %}> 6시~7시</label>
+                                                <label><input type="checkbox" name="hour" value=" 7시" class="cb3"
+                                                                id="cbtest7" {% if ' 7시' in selected_hour2 %}checked{%
+                                                                endif %}> 7시~8시</label>
+                                                <label><input type="checkbox" name="hour" value=" 8시" class="cb3"
+                                                                id="cbtest7" {% if ' 8시' in selected_hour2 %}checked{%
+                                                                endif %}> 8시~9시</label>
+                                                <label><input type="checkbox" name="hour" value=" 9시" class="cb3"
+                                                                id="cbtest7" {% if ' 9시' in selected_hour2 %}checked{%
+                                                                endif %}> 9시~10시</label>
+                                                <label><input type="checkbox" name="hour" value=" 10시" class="cb3"
+                                                                id="cbtest7" {% if ' 10시' in selected_hour2 %}checked{%
+                                                                endif %}> 10시~11시</label>
+                                                <label><input type="checkbox" name="hour" value=" 11시" class="cb3"
+                                                                id="cbtest7" {% if ' 11시' in selected_hour2 %}checked{%
+                                                                endif %}> 11시~12시</label>
+                                                <label><input type="checkbox" name="hour" value=" 12시" class="cb3"
+                                                                id="cbtest7" {% if ' 12시' in selected_hour2 %}checked{%
+                                                                endif %}> 12시~13시</label>
+                                                <label><input type="checkbox" name="hour" value=" 13시" class="cb3"
+                                                                id="cbtest7" {% if ' 13시' in selected_hour2 %}checked{%
+                                                                endif %}> 13시~14시</label>
+                                                <label><input type="checkbox" name="hour" value=" 14시" class="cb3"
+                                                                id="cbtest7" {% if ' 14시' in selected_hour2 %}checked{%
+                                                                endif %}> 14시~15시</label>
+                                                <label><input type="checkbox" name="hour" value=" 15시" class="cb3"
+                                                                id="cbtest7" {% if ' 15시' in selected_hour2 %}checked{%
+                                                                endif %}> 15시~16시</label>
+                                                <label><input type="checkbox" name="hour" value=" 16시" class="cb3"
+                                                                id="cbtest7" {% if ' 16시' in selected_hour2 %}checked{%
+                                                                endif %}> 16시~17시</label>
+                                                <label><input type="checkbox" name="hour" value=" 17시" class="cb3"
+                                                                id="cbtest7" {% if ' 17시' in selected_hour2 %}checked{%
+                                                                endif %}> 17시~18시</label>
+                                                <label><input type="checkbox" name="hour" value=" 18시" class="cb3"
+                                                                id="cbtest7" {% if ' 18시' in selected_hour2 %}checked{%
+                                                                endif %}> 18시~19시</label>
+                                                <label><input type="checkbox" name="hour" value=" 19시" class="cb3"
+                                                                id="cbtest7" {% if ' 19시' in selected_hour2 %}checked{%
+                                                                endif %}> 19시~20시</label>
+                                                <label><input type="checkbox" name="hour" value=" 20시" class="cb3"
+                                                                id="cbtest7" {% if ' 20시' in selected_hour2 %}checked{%
+                                                                endif %}> 20시~21시</label>
+                                                <label><input type="checkbox" name="hour" value=" 21시" class="cb3"
+                                                                id="cbtest7" {% if ' 21시' in selected_hour2 %}checked{%
+                                                                endif %}> 21시~22시</label>
+                                                <label><input type="checkbox" name="hour" value=" 22시" class="cb3"
+                                                                id="cbtest7" {% if ' 22시' in selected_hour2 %}checked{%
+                                                                endif %}> 22시~23시</label>
+                                                <label><input type="checkbox" name="hour" value=" 23시" class="cb3"
+                                                                id="cbtest7" {% if ' 23시' in selected_hour2 %}checked{%
+                                                                endif %}> 23시~00시</label>
+                                        </div>
+                                </div>
+                                <div class="condition-label">
+                                        <label class="label_set">선택 나이대</label><input type="checkbox" class="checkall"
+                                                id="selectAllAge2"><br>
+                                        <div class="checkboxes2">
+                                                <label><input type="checkbox" name="age" value=" 0세" class="cb4"
+                                                                id="cbtest8" {% if ' 0세' in selected_age2 %}checked{%
+                                                                endif %}> 9세 이하</label>
+                                                <label><input type="checkbox" name="age" value=" 10세" class="cb4"
+                                                                id="cbtest8" {% if ' 10세' in selected_age2 %}checked{%
+                                                                endif %}> 10~19세</label>
+                                                <label><input type="checkbox" name="age" value=" 20세" class="cb4"
+                                                                id="cbtest8" {% if ' 20세' in selected_age2 %}checked{%
+                                                                endif %}> 20~29세</label>
+                                                <label><input type="checkbox" name="age" value=" 30세" class="cb4"
+                                                                id="cbtest8" {% if ' 30세' in selected_age2 %}checked{%
+                                                                endif %}> 30~39세</label>
+                                                <label><input type="checkbox" name="age" value=" 40세" class="cb4"
+                                                                id="cbtest8" {% if ' 40세' in selected_age2 %}checked{%
+                                                                endif %}> 40~49세</label>
+                                                <label><input type="checkbox" name="age" value=" 50세" class="cb4"
+                                                                id="cbtest8" {% if ' 50세' in selected_age2 %}checked{%
+                                                                endif %}> 50~59세</label>
+                                                <label><input type="checkbox" name="age" value=" 60세" class="cb4"
+                                                                id="cbtest8" {% if ' 60세' in selected_age2 %}checked{%
+                                                                endif %}> 60~69세</label>
+                                                <label><input type="checkbox" name="age" value=" 70세" class="cb4"
+                                                                id="cbtest8" {% if ' 70세' in selected_age2 %}checked{%
+                                                                endif %}> 70~79세</label>
+                                                <label><input type="checkbox" name="age" value=" 80세" class="cb4"
+                                                                id="cbtest8" {% if ' 80세' in selected_age2 %}checked{%
+                                                                endif %}> 80세 이상</label>
+                                        </div>
+                                </div>
+
+                                <div class="dropdown-grid2">
+                                        <div class="dropdown-area1">
+                                                <div class="dropdown-title">
+                                                        <h3>성별</h3>
+                                                </div>
+                                                <select name="sex" , id="sex_data2">
+                                                        <option value="남성+여성" {% if selected_sex2=='남성+여성' %}selected{%
+                                                                endif %}>남성+여성</option>
+                                                        <option value="남성" {% if selected_sex2=='남성' %}selected{% endif
+                                                                %}>남성</option>
+                                                        <option value="여성" {% if selected_sex2=='여성' %}selected{% endif
+                                                                %}>여성</option>
+                                                </select>
+                                        </div>
+
+                                        <div class="dropdown-area5">
+                                                <div class="dropdown-title">
+                                                        <h3>도착지 색상</h3>
+                                                </div>
+                                                <select name="map_color" id="color_data">
+                                                        <option value="OrRd" {% if selected_color2=='OrRd' %}selected{%
+                                                                endif %}>빨강</option>
+                                                        <option value="BuPu" {% if selected_color2=='BuPu' %}selected{%
+                                                                endif %}>파랑</option>
+                                                        <option value="YlGn" {% if selected_color2=='YlGn' %}selected{%
+                                                                endif %}>초록</option>
+                                                </select>
+                                        </div>
+
+                                        <div class="dropdown-area1">
+                                                <div class="dropdown-title">
+                                                        <h3>선 굵기 기준</h3>
+                                                </div>
+                                                <select name="distribution" , id="dist_data2">
+                                                        <option value="personcount" {% if selected_dist2=='personcount'
+                                                                %}selected{% endif %}>인원수(명)
+                                                        </option>
+                                                        <option value="dist" {% if selected_dist2=='dist' %}selected{%
+                                                                endif %}>이동거리 (m)</option>
+                                                        <option value="ttime" {% if selected_dist2=='ttime' %}selected{%
+                                                                endif %}>이동시간 (분)</option>
+                                                        <option value="versus_time" {% if selected_dist2=='versus_time'
+                                                                %}selected{% endif %}>시간÷거리(비율)</option>
+
+                                                </select>
+                                        </div>
+
+                                        <div class="dropdown-area6">
+                                                <div class="dropdown-title">
+                                                        <h3>최소 기준치</h3>
+                                                </div>
+                                                <select name="criteria_value" , id="criteria_data2">
+                                                </select>
+                                        </div>
+                                </div>
+                                <div class="input_poly">
+                                        <label id="polylabel" for="numberInput2">출발지 : </label><input
+                                                type="number" id="numberInput2" name="numberInput2"
+                                                placeholder="6자리 숫자" value="{{ input_poly_flow1 }}">
+                                        <label id="polylabel" for="numberInput3">도착지 : </label><input
+                                                type="number" id="numberInput3" name="numberInput3"
+                                                placeholder="6자리 숫자" value="{{ input_poly_flow2 }}">
+                                </div>
+                                <button class="button" type="submit" id="btnValue" name="submit_button"
+                                        value="flow">FlowMap으로
+                                        보기</button>
+                                <br><br>
+                        </form>
+                </div>
+        </div>
+        <!--
+        <div class="search_tab">
+                <div class="search_content">
+                        Polycode : <input id="searchInput" placeholder="검색어를 입력하세요..."><br>
+                        <ul id="list">
+                                
+                        </ul>
+                </div>
+
+        </div>
+-->
+
+        <div class="map-container" id="mapContainer">
+                {{ map_html|safe }}
+        </div>
+
+        <div id="loadingScreen" class="loading-wrap loading-wrap--js" style="display: none">
+                <div class="loading-spinner loading-spinner--js"></div>
+                <div id="loadingMessage">잠시만 기다려주세요..</div>
+        </div>
+
+        <script src="{{ url_for('static', filename='javasripts/check_all.js') }}"></script>
+        <script src="{{ url_for('static', filename='javasripts/tab_page.js') }}"></script>
+        <script src="{{ url_for('static', filename='javasripts/change_select.js') }}"></script>
+        <script src="{{ url_for('static', filename='javasripts/reset_button.js') }}"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://unpkg.com/sweetalert@2.1.2/dist/sweetalert.min.js"></script>
+
+        <script>
+                $(document).ready(function () {
+                        // 페이지가 로드될 때 'heat_tab' 라디오 버튼을 선택
+                        var selectedButton = "{{ selected_button }}";
+
+                        const selected_cri1 = '{{ selected_criteria1 }}'
+                        const selected_cri2 = '{{ selected_criteria2 }}'
+
+                        const select_criteria1 = document.getElementById('criteria_data1');
+                        const select_criteria2 = document.getElementById('criteria_data2');
+
+                        // 초기값 설정
+                        select_criteria1.value = select_criteria1.options[0].value;
+                        select_criteria2.value = select_criteria2.options[0].value;
+
+                        if (selected_cri1 != '') {
+                                select_criteria1.value = selected_cri1;
+                        }
+
+                        if (selected_cri2 != '') {
+                                select_criteria2.value = selected_cri2;
+                        }
+
+                        if (selectedButton == 'flow') {
+                                $('#flow_tab').prop('checked', true);
+                        } else {
+                                $('#heat_tab').prop('checked', true);
+                        }
+
+                });
+        </script>
+        <script>
+                function validateForm_heat() {
+
+                        var con1 = $('input:checkbox[id="cbtest1"]').is(":checked")
+                        var con3 = $('input:checkbox[id="cbtest3"]').is(":checked")
+                        var con4 = $('input:checkbox[id="cbtest4"]').is(":checked")
+
+                        var inputValue = document.getElementById('numberInput1').value;
+                        var number = parseInt(inputValue);
+
+                        if (!(con1 && con3 && con4)) {
+                                swal("경고", "미선택한 조건이 있습니다.", 'info')
+                                return false;
+                        }
+
+                        if (inputValue !== "" && inputValue.length !== 6) {
+                                swal("경고", "6자리 숫자를 입력하거나, 빈칸으로 넣어주세요.", 'info')
+                                return false;
+                        }
+                        showLoadingScreen_heat()
+                        return true;
+                }
+
+                function validateForm_flow() {
+
+                        var con5 = $('input:checkbox[id="cbtest5"]').is(":checked")
+                        var con7 = $('input:checkbox[id="cbtest7"]').is(":checked")
+                        var con8 = $('input:checkbox[id="cbtest8"]').is(":checked")
+
+                        var inputValue = document.getElementById('numberInput2').value;
+                        var inputValue2 = document.getElementById('numberInput3').value;
+
+                        var number = parseInt(inputValue);
+
+                        if (!(con5 && con7 && con8)) {
+                                swal("경고", "미선택한 조건이 있습니다.", 'info')
+                                return false;
+                        }
+
+                        if ((inputValue !== "" && inputValue.length !== 6) || (inputValue2 !== "" && inputValue2.length !== 6)) {
+                                swal("경고", "6자리 숫자를 입력하거나, 빈칸으로 넣어주세요.", 'info')
+                                return false;
+                        }
+                        showLoadingScreen_flow()
+                        return true;
+                }
+                function showLoadingScreen_heat() {
+                        var loadingScreen = document.getElementById('loadingScreen');
+                        var loadingMessage = document.getElementById('loadingMessage');
+                        loadingScreen.style.display = 'block';
+
+                        var con1_checked = $('input:checkbox[id="cbtest1"]:checked').length;
+                        var con3_checked = $('input:checkbox[id="cbtest3"]:checked').length;
+                        var con4_checked = $('input:checkbox[id="cbtest4"]:checked').length;
+
+                        // loadingMessage.innerText = "예상 소요시간은 " + (con1_checked + con3_checked + con4_checked) + "분 입니다.";
+                }
+                function showLoadingScreen_flow() {
+                        var loadingScreen = document.getElementById('loadingScreen');
+                        var loadingMessage = document.getElementById('loadingMessage');
+                        loadingScreen.style.display = 'block';
+
+                        var con1_checked = $('input:checkbox[id="cbtest5"]:checked').length;
+                        var con3_checked = $('input:checkbox[id="cbtest7"]:checked').length;
+                        var con4_checked = $('input:checkbox[id="cbtest8"]:checked').length;
+
+                        // loadingMessage.innerText = "예상 소요시간은 " + (con1_checked + con3_checked + con4_checked) + "분 입니다.";
+
+                }
+                function handleSubmit() {
+                        var inputValue = document.getElementById('numberInput').value;
+
+                        // 입력된 값이 숫자가 아닌 경우 또는 6자리가 아닌 경우 오류를 발생시킴
+                        if (!(/^\d{6}$/.test(inputValue))) {
+                                alert("숫자를 6자리로 입력해주세요.");
+                                return false; // 폼 제출 방지
+                        }
+
+                        // 폼 제출 시 입력된 숫자를 가져오는 예시
+                        console.log("입력된 숫자:", inputValue);
+                        return true; // 폼 제출 허용
+                }
+
+        </script>
+        <!-- <script src="./test.js"></script> -->
+</body>
+
+</html>
